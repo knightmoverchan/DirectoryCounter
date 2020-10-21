@@ -1,19 +1,17 @@
 <?php
-$count = new FilesystemIterator(__DIR__, FilesystemIterator::SKIP_DOTS);
-$files  = iterator_count($count);
-$size = getSize();
-$toPrint = array("count: " => $files, "total_size: " => $size);
 
-var_dump(json_encode($toPrint));
+$filesandSize = getFileAndSize();
+var_dump(json_encode($filesandSize));
 
-
-function getSize()
+function getFileAndSize()
 {
     $size = 0;
-    foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator("./")) as $file){
+    $files = 0;
+    foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator("./files_dir")) as $file){
         $size+=$file->getSize();
+        $files++;
     }
-    return $size;
+    $size = number_format( ((int) $size)/1000000, 1);
+    $return = array("count: " => $files, "total_size: " => $size);
+    return $return;
 }
-
-?>
